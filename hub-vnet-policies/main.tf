@@ -1,0 +1,70 @@
+## Config for ER and L4-L7 Services on Hub VNet ##
+
+# Shared Resources AP
+
+resource "aci_cloud_applicationcontainer" "shared_ap" {
+  tenant_dn = data.aci_tenant.infra_tenant.id
+  name      = var.shared_ap
+}
+
+# ER EPG + Allowed On-Prem Prefixes/Subnets
+
+resource "aci_cloud_external_epg" "er_epg" {
+  name                            = var.er_epg
+  cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.shared_ap.id
+  relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.shared_vrf.id
+  relation_fv_rs_prov             = [aci_contract.cloud_to_onprem.id]
+  route_reachability              = "site-ext"
+}
+
+resource "aci_cloud_endpoint_selectorfor_external_epgs" "ext_subnet1" {
+  cloud_external_epg_dn = aci_cloud_external_epg.er_epg.id
+  name                  = var.er_subnet1_name
+  subnet                = var.er_subnet1
+}
+
+resource "aci_cloud_endpoint_selectorfor_external_epgs" "ext_subnet2" {
+  cloud_external_epg_dn = aci_cloud_external_epg.er_epg.id
+  name                  = var.er_subnet2_name
+  subnet                = var.er_subnet2
+}
+
+# ER Contract on Infra Tenant for Cloud to On-prem connectivity
+
+resource "aci_contract" "cloud_to_onprem" {
+  tenant_dn = data.aci_tenant.infra_tenant.id
+  name      = var.er_contract_cloud_to_onprem
+  scope     = "global" # This contract will need to be imported and visible in the user/workload tenant
+}
+
+resource "aci_contract_subject" "cloud_to_onprem" {
+  contract_dn                  = aci_contract.cloud_to_onprem.id
+  name                         = "cloud_to_onprem"
+  relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id] 
+}
+
+# FW Mgmt EPG + Contract to allow SSH/HTTPs acccess
+
+resource "aci_cloud_epg" "fw_mgmt_epg" {
+  name                            = var.fw_mgmt_epg
+  cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.shared_ap.id
+  relation_fv_rs_prov             = [aci_contract.fw_mgmt_access.id]
+  relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.shared_vrf.id
+}
+
+resource "aci_cloud_endpoint_selector" "fw_mgmt" {
+  cloud_epg_dn     = aci_cloud_epg.fw_mgmt_epg.id
+  name             = var.fw_mgmt_subnet_name
+  match_expression = var.fw_mgmt_subnet # This requires the Hub VNet to be configured already with an additional CIDR
+}
+
+resource "aci_contract" "fw_mgmt_access" {
+  tenant_dn = data.aci_tenant.infra_tenant.id
+  name      = var.fw_mgmt_contract_name
+}
+
+resource "aci_contract_subject" "fw_mgmt_access" {
+  contract_dn                  = aci_contract.fw_mgmt_access.id
+  name                         = "fw_subject"
+  relation_vz_rs_subj_filt_att = [data.aci_filter.ssh_https.id] 
+}
