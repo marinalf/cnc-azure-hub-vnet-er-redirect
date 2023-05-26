@@ -1,6 +1,10 @@
 
+data "aci_tenant" "infra_tenant" {
+  name = "infra"
+}
+
 data "aci_tenant" "tenant1" {
-  name        = var.tenant_name
+  name = var.tenant_name
 }
 
 data "aci_vrf" "vnet1" {
@@ -11,4 +15,9 @@ data "aci_vrf" "vnet1" {
 data "aci_filter" "default_filter" {
   tenant_dn = "uni/tn-common"
   name      = "default" # Existing default filter allowing any traffic
+}
+
+data "aci_contract" "cloud_to_onprem" {
+  tenant_dn = data.aci_tenant.infra_tenant.id
+  name      = var.er_contract_cloud_to_onprem
 }

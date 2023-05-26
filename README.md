@@ -12,6 +12,6 @@ This is a sample code to build networking and policies on Azure through Cloud Ne
 4. Deploy Hub VNet policies **(hub-vnet-policies)** for ER and firewall mgmt access. 
 5. Deploy sample VNet and subnets **(spoke-vnets-networking)**.
 6. Deploy sample VNet policies **(spoke-vnets-policies)**.
-7. Deploy inter-tenant contracts **(imported-contracts)**. 
+7. Deploy inter-tenant imported contract on Hub VNet (see notes on hub-vnet-policies under aci_cloud_external_epg). 
 8. Create a logical device to represent L4-L7 firewall and tag firewall interfaces on CNC as well on azure. Define service graph for firewal redirect.
 9. Associate service graph on ER contracts (on-prem to cloud and cloud to on-prem) and inter-vnet contracts (not part of this code yet).

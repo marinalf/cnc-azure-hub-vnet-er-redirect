@@ -51,8 +51,12 @@ variable "internet_contract" {
   default = "internet-access"
 }
 
-# ER contract to allow on-prem to cloud connectivity
+# ER contract to allow on-prem/cloud and cloud/on-prem connectivity
 
 variable "er_contract_onprem_to_cloud" {
   default = "onprem-to-cloud"
+}
+
+variable "er_contract_cloud_to_onprem" {
+  default = "cloud-to-onprem"
 }

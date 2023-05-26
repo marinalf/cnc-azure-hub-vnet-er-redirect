@@ -14,7 +14,9 @@ resource "aci_cloud_epg" "vnet1_epg" {
   name                            = var.vnet1_epg
   cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.vnet1_ap.id
   relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.vnet1.id
-  relation_fv_rs_prov             = [aci_contract.internet_access.id,aci_contract.onprem_to_cloud.id]
+  relation_fv_rs_prov             = [aci_contract.internet_access.id, aci_contract.onprem_to_cloud.id]
+  relation_fv_rs_cons_if          = [aci_imported_contract.cloud_to_onprem.id]
+  depends_on                      = [aci_imported_contract.cloud_to_onprem]
 }
 
 resource "aci_cloud_endpoint_selector" "vnet1_epg_selector" {
@@ -34,7 +36,7 @@ resource "aci_contract" "onprem_to_cloud" {
 resource "aci_contract_subject" "onprem_to_cloud" {
   contract_dn                  = aci_contract.onprem_to_cloud.id
   name                         = "onprem_to_cloud"
-  relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id] 
+  relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id]
 }
 
 # Cloud External EPG for Internet Access (Optional per VNet)
@@ -65,4 +67,21 @@ resource "aci_contract_subject" "internet_access" {
   contract_dn                  = aci_contract.internet_access.id
   name                         = "internet-access"
   relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id]
+}
+
+# Import contract from Workload Tenant to Infra Tenant to enable ER access
+
+resource "aci_imported_contract" "onprem_to_cloud" {
+  tenant_dn         = data.aci_tenant.infra_tenant.id
+  name              = "onprem-to-cloud-imported"
+  relation_vz_rs_if = aci_contract.onprem_to_cloud.id
+  depends_on        = [aci_contract.onprem_to_cloud]
+}
+
+# Import contract from Infra Tenant to Workload Tenant to enable ER access
+
+resource "aci_imported_contract" "cloud_to_onprem" {
+  tenant_dn         = data.aci_tenant.tenant1.id
+  name              = "cloud-to-onprem-imported"
+  relation_vz_rs_if = data.aci_contract.cloud_to_onprem.id
 }

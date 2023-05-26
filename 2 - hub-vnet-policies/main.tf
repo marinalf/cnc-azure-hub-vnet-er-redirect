@@ -14,6 +14,10 @@ resource "aci_cloud_external_epg" "er_epg" {
   cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.shared_ap.id
   relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.shared_vrf.id
   relation_fv_rs_prov             = [aci_contract.cloud_to_onprem.id]
+/*
+# To be enabled only after a contract is imported from workload tenant
+  relation_fv_rs_cons_if          = [data.aci_imported_contract.onprem_to_cloud.id] 
+*/
   route_reachability              = "site-ext"
 }
 
@@ -40,7 +44,7 @@ resource "aci_contract" "cloud_to_onprem" {
 resource "aci_contract_subject" "cloud_to_onprem" {
   contract_dn                  = aci_contract.cloud_to_onprem.id
   name                         = "cloud_to_onprem"
-  relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id] 
+  relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id]
 }
 
 # FW Mgmt EPG + Contract to allow SSH/HTTPs acccess
@@ -66,5 +70,5 @@ resource "aci_contract" "fw_mgmt_access" {
 resource "aci_contract_subject" "fw_mgmt_access" {
   contract_dn                  = aci_contract.fw_mgmt_access.id
   name                         = "fw_subject"
-  relation_vz_rs_subj_filt_att = [data.aci_filter.ssh_https.id] 
+  relation_vz_rs_subj_filt_att = [data.aci_filter.ssh_https.id]
 }
