@@ -6,8 +6,8 @@ variable "password" {}
 variable "url" {}
 variable "subscription_id" {}
 
-variable "shared_vrf" {
-  default = "shared-resources"
+variable "services_vrf" {
+  default = "hub-services"
 }
 
 # Firewall CIDR/Subnets

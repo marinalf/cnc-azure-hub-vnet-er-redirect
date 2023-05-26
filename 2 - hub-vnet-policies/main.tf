@@ -2,23 +2,24 @@
 
 # Shared Resources AP
 
-resource "aci_cloud_applicationcontainer" "shared_ap" {
+resource "aci_cloud_applicationcontainer" "services_ap" {
   tenant_dn = data.aci_tenant.infra_tenant.id
-  name      = var.shared_ap
+  name      = var.services_ap
 }
 
 # ER EPG + Allowed On-Prem Prefixes/Subnets
 
 resource "aci_cloud_external_epg" "er_epg" {
   name                            = var.er_epg
-  cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.shared_ap.id
-  relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.shared_vrf.id
+  cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.services_ap.id
+  relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.services_vrf.id
+  route_reachability              = "site-ext"
   relation_fv_rs_prov             = [aci_contract.cloud_to_onprem.id]
 /*
 # To be enabled only after a contract is imported from workload tenant
+
   relation_fv_rs_cons_if          = [data.aci_imported_contract.onprem_to_cloud.id] 
 */
-  route_reachability              = "site-ext"
 }
 
 resource "aci_cloud_endpoint_selectorfor_external_epgs" "ext_subnet1" {
@@ -51,9 +52,9 @@ resource "aci_contract_subject" "cloud_to_onprem" {
 
 resource "aci_cloud_epg" "fw_mgmt_epg" {
   name                            = var.fw_mgmt_epg
-  cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.shared_ap.id
+  cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.services_ap.id
   relation_fv_rs_prov             = [aci_contract.fw_mgmt_access.id]
-  relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.shared_vrf.id
+  relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.services_vrf.id
 }
 
 resource "aci_cloud_endpoint_selector" "fw_mgmt" {

@@ -8,12 +8,8 @@ variable "subscription_id" {}
 
 # Hub VNet variables for Express Route
 
-variable "shared_vrf_name" {
-  default = "shared-resources"
-}
-
-variable "shared_ap" {
-  default = "shared-resources-ap"
+variable "services_ap" {
+  default = "services-ap"
 }
 
 variable "er_epg" {

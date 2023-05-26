@@ -9,9 +9,9 @@ data "aci_cloud_account" "aci_cloud_account_infra" {
   vendor     = "azure"
 }
 
-data "aci_vrf" "shared_vrf" {
+data "aci_vrf" "services_vrf" {
   tenant_dn = data.aci_tenant.infra_tenant.id # Secondary VRF to host new CIDRs
-  name      = "shared-resources"
+  name      = "hub-services"
 }
 
 # Data Sources used for ER

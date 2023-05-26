@@ -1,9 +1,9 @@
 
 ## Adding secondary CIDRs/Subnets into the Hub VNet ##
 
-resource "aci_vrf" "shared_vrf" {
+resource "aci_vrf" "services_vrf" {
   tenant_dn = data.aci_tenant.infra_tenant.id # Secondary VRF to host new CIDRs within Hub VNet.
-  name = var.shared_vrf
+  name = var.services_vrf
 }
 
 /*
