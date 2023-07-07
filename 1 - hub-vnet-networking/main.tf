@@ -19,7 +19,7 @@ resource "aci_rest_managed" "disable_enable_hub_networking" {
 
 */
 
-# Firewall CIDR/Subnets
+# Firewall CIDR/Subnets (inclusive of Load Balancer subnet)
 
 resource "aci_cloud_cidr_pool" "fw_cidr" {
   cloud_context_profile_dn = data.aci_cloud_context_profile.hub_vnet.id

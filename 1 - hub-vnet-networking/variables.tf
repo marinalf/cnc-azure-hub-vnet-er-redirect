@@ -10,7 +10,7 @@ variable "services_vrf" {
   default = "hub-services"
 }
 
-# Firewall CIDR/Subnets
+# Firewall/LB CIDR/Subnets
 
 variable "fw_cidr" {
   default = "12.1.0.0/21"
@@ -23,16 +23,20 @@ variable "fw_subnets" {
   }))
   default = {
     mgmt-subnet = {
-      name = "mgmt-subnet"
+      name = "fw-mgmt-subnet"
       ip   = "12.1.0.0/24"
     },
     trust-subnet = {
-      name = "trust-subnet"
+      name = "fw-trust-subnet"
       ip   = "12.1.1.0/24"
     },
     untrust-subnet = {
-      name = "untrust-subnet"
+      name = "fw-untrust-subnet"
       ip   = "12.1.2.0/24"
+    },
+    lb-subnet = {
+      name = "lb-subnet"
+      ip   = "12.1.3.0/24"
     }
   }
 }
