@@ -75,7 +75,7 @@ resource "aci_contract_subject" "fw_mgmt_access" {
   relation_vz_rs_subj_filt_att = [data.aci_filter.ssh_https.id]
 }
 
-# Associate fw_mgmt_access contract as consumer on existing ext_networks
+# Associate fw_mgmt_access contract as consumer on existing ext_networks EPG
 
 resource "aci_epg_to_contract" "ext_networks" {
   application_epg_dn = data.aci_cloud_external_epg.ext_networks.id
