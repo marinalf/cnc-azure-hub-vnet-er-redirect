@@ -42,7 +42,7 @@ variable "fw_mgmt_epg" {
   default = "fw-mgmt-epg"
 }
 
-variable "fw_mgmt_contract_name" {
+variable "fw_mgmt_contract" {
   default = "fw-mgmt-access"
 }
 

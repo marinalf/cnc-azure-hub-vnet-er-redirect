@@ -10,7 +10,7 @@ data "aci_cloud_account" "aci_cloud_account_infra" {
 }
 
 data "aci_vrf" "services_vrf" {
-  tenant_dn = data.aci_tenant.infra_tenant.id # Secondary VRF to host new CIDRs
+  tenant_dn = "uni/tn-infra"
   name      = "hub-services"
 }
 
@@ -23,13 +23,18 @@ data "aci_filter" "default_filter" {
 
 # Data Sources used for FW mgmt access
 
-data "aci_contract" "ssh_https" {
+data "aci_filter" "ssh_https" {
   tenant_dn = "uni/tn-infra"
-  name      = "ssh-https" # Existing contract with SSH & HTTPs filter allowing mgmt access to CNC/CCRs public IPs
+  name      = "ssh-https" # Existing SSH & HTTPs filter allowing mgmt access to CNC/CCRs public IPs
 }
 
+data "aci_cloud_external_epg" "ext_networks" {
+  cloud_applicationcontainer_dn   = "uni/tn-infra/cloudapp-cloud-infra"
+  name                            = "ext-networks"
+  
+}
 /*
-# To be used only after a contract is imported from workload tenant
+# To be used only after the contract is imported from workload tenant
 
 data "aci_imported_contract" "onprem_to_cloud" {
   tenant_dn = data.aci_tenant.infra_tenant.id
