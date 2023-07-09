@@ -25,12 +25,12 @@ resource "aci_cloud_endpoint_selector" "vnet1_epg_selector" {
   match_expression = var.vnet1_epg_ip_based
 }
 
-# ER Contract on Workoad Tenant for On-prem to Cloud connectivity
+# ER Contract on Workload Tenant for On-prem to Cloud connectivity
 
 resource "aci_contract" "onprem_to_cloud" {
   tenant_dn = data.aci_tenant.tenant1.id
   name      = var.er_contract_onprem_to_cloud
-  scope     = "global" # This contract will need to be imported and visible in the user/workload tenant
+  scope     = "global" # This contract will need to be imported and visible in the infra tenant
 }
 
 resource "aci_contract_subject" "onprem_to_cloud" {
