@@ -23,9 +23,9 @@ data "aci_filter" "default_filter" {
 
 # Data Sources used for FW mgmt access
 
-data "aci_filter" "ssh_https" {
+data "aci_contract" "ssh_https" {
   tenant_dn = "uni/tn-infra"
-  name      = "ssh-https" # Existing SSH & HTTPs filter allowing mgmt access to CNC/CCRs public IP
+  name      = "ssh-https" # Existing contract with SSH & HTTPs filter allowing mgmt access to CNC/CCRs public IPs
 }
 
 /*
