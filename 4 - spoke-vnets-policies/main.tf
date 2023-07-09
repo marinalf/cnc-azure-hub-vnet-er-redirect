@@ -69,7 +69,7 @@ resource "aci_contract_subject" "internet_access" {
   relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id]
 }
 
-# Import contract from Workload Tenant to Infra Tenant to enable ER access
+# Import contract from Workload Tenant to Infra Tenant to enable ER access to Cloud
 
 resource "aci_imported_contract" "onprem_to_cloud" {
   tenant_dn         = data.aci_tenant.infra_tenant.id
@@ -78,7 +78,7 @@ resource "aci_imported_contract" "onprem_to_cloud" {
   depends_on        = [aci_contract.onprem_to_cloud]
 }
 
-# Import contract from Infra Tenant to Workload Tenant to enable ER access
+# Import contract from Infra Tenant to Workload Tenant to enable Cloud to ER access
 
 resource "aci_imported_contract" "cloud_to_onprem" {
   tenant_dn         = data.aci_tenant.tenant1.id
