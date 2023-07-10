@@ -40,3 +40,7 @@ variable "fw_subnets" {
     }
   }
 }
+
+variable "hub_region" {
+  default = "japaneast"
+}

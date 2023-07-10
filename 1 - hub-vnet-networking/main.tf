@@ -33,4 +33,5 @@ resource "aci_cloud_subnet" "fw_subnets" {
   name                            = each.value.name
   ip                              = each.value.ip
   relation_cloud_rs_subnet_to_ctx = aci_vrf.services_vrf.id
+  zone                            = "uni/clouddomp/provp-azure/region-${var.hub_region}/zone-default" 
 }
