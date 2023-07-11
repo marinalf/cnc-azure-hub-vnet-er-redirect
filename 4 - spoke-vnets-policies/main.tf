@@ -8,6 +8,13 @@ resource "aci_cloud_applicationcontainer" "vnet1_ap" {
   name      = var.vnet1_ap
 }
 
+# Application Profile for VNet2 EPG
+
+resource "aci_cloud_applicationcontainer" "vnet2_ap" {
+  tenant_dn = data.aci_tenant.tenant1.id
+  name      = var.vnet2_ap
+}
+
 # VNet1 EPG (Single ASG, Network Centric)
 
 resource "aci_cloud_epg" "vnet1_epg" {
@@ -15,6 +22,7 @@ resource "aci_cloud_epg" "vnet1_epg" {
   cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.vnet1_ap.id
   relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.vnet1.id
   relation_fv_rs_prov             = [aci_contract.internet_access.id, aci_contract.onprem_to_cloud.id]
+  relation_fv_rs_cons             = [aci_contract.inter_vnet.id]
   relation_fv_rs_cons_if          = [aci_imported_contract.cloud_to_onprem.id]
   depends_on                      = [aci_imported_contract.cloud_to_onprem]
 }
@@ -23,6 +31,21 @@ resource "aci_cloud_endpoint_selector" "vnet1_epg_selector" {
   cloud_epg_dn     = aci_cloud_epg.vnet1_epg.id
   name             = var.vnet1_epg_selector
   match_expression = var.vnet1_epg_ip_based
+}
+
+# VNet2 EPG (Single ASG, Network Centric)
+
+resource "aci_cloud_epg" "vnet2_epg" {
+  name                            = var.vnet2_epg
+  cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.vnet2_ap.id
+  relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.vnet2.id
+  relation_fv_rs_prov             = [aci_contract.internet_access.id, aci_contract.inter_vnet.id]
+}
+
+resource "aci_cloud_endpoint_selector" "vnet2_epg_selector" {
+  cloud_epg_dn     = aci_cloud_epg.vnet2_epg.id
+  name             = var.vnet2_epg_selector
+  match_expression = var.vnet2_epg_ip_based
 }
 
 # ER Contract on Workload Tenant for On-prem to Cloud connectivity
@@ -39,7 +62,7 @@ resource "aci_contract_subject" "onprem_to_cloud" {
   relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id]
 }
 
-# Cloud External EPG for Internet Access (Optional per VNet)
+# Cloud External EPG for Internet Access (VNet1)
 
 resource "aci_cloud_external_epg" "vnet1_internet" {
   name                            = var.vnet1_internet
@@ -53,6 +76,22 @@ resource "aci_cloud_endpoint_selectorfor_external_epgs" "vnet1_ext_epg_selector"
   cloud_external_epg_dn = aci_cloud_external_epg.vnet1_internet.id
   name                  = var.vnet1_selector_name
   subnet                = var.vnet1_selector_subnet
+}
+
+# Cloud External EPG for Internet Access (VNet2)
+
+resource "aci_cloud_external_epg" "vnet2_internet" {
+  name                            = var.vnet2_internet
+  cloud_applicationcontainer_dn   = aci_cloud_applicationcontainer.vnet2_ap.id
+  relation_fv_rs_cons             = [aci_contract.internet_access.id]
+  relation_cloud_rs_cloud_epg_ctx = data.aci_vrf.vnet2.id
+  route_reachability              = "internet"
+}
+
+resource "aci_cloud_endpoint_selectorfor_external_epgs" "vnet2_ext_epg_selector" {
+  cloud_external_epg_dn = aci_cloud_external_epg.vnet2_internet.id
+  name                  = var.vnet2_selector_name
+  subnet                = var.vnet2_selector_subnet
 }
 
 # Contract for Internet Access
@@ -84,4 +123,18 @@ resource "aci_imported_contract" "cloud_to_onprem" {
   tenant_dn         = data.aci_tenant.tenant1.id
   name              = "cloud-to-onprem-imported"
   relation_vz_rs_if = data.aci_contract.cloud_to_onprem.id
+}
+
+# Inter-VNet Contract
+
+resource "aci_contract" "inter_vnet" {
+  tenant_dn = data.aci_tenant.tenant1.id
+  name      = var.inter_vnet_contract
+  scope     = "tenant" # This allows this contract to be used by other VNets/EPG in the same tenant
+}
+
+resource "aci_contract_subject" "inter_vnet" {
+  contract_dn                  = aci_contract.inter_vnet.id
+  name                         = "inter-vnet-contract"
+  relation_vz_rs_subj_filt_att = [data.aci_filter.default_filter.id]
 }

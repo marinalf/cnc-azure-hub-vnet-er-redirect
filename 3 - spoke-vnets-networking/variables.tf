@@ -50,3 +50,34 @@ variable "vnet1_subnets" {
     }
   }
 }
+
+# VNet 2 variables
+
+variable "vnet2_name" {
+  default = "database"
+}
+
+variable "cxt_vnet2" {
+  default = "ctx-vnet2"
+}
+
+variable "vnet2_cidr" {
+  default = "30.100.0.0/21"
+}
+
+variable "vnet2_region1" {
+  default = "japaneast"
+}
+
+variable "vnet2_subnets" {
+  type = map(object({
+    name = string
+    ip   = string
+  }))
+  default = {
+    subnet3 = {
+      name = "subnet3"
+      ip   = "30.100.0.0/24"
+    }
+  }
+}
