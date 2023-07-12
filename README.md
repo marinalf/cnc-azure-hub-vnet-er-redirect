@@ -27,7 +27,7 @@ This is a sample terraform code to build networking and policies on Azure throug
 2. Deploy sample VNets policies <font color="lightblue">(4 - spoke-vnets-policies)</font>.
 
 **Part 5 - Deploy Inter-Tenant Policies**
-1. Deploy imported contract on Hub VNet see comments on <font color="lightblue">(2 - hub-vnet-policies)</font>. 
+1. Deploy imported contract on Hub VNet, see comments on <font color="lightblue">(2 - hub-vnet-policies)</font>. 
 
 **Part 6 - Apply Service Graph**
 1. Associate the service graph on the ER contract (onprem-to-cloud) and inter-vnet contract.
