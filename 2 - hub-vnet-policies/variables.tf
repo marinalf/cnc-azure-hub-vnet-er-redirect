@@ -25,11 +25,11 @@ variable "er_subnet2_name" {
 }
 
 variable "er_subnet1" {
-  default = "172.150.0.0/24"
+  default = "172.50.0.0/24"
 }
 
 variable "er_subnet2" {
-  default = "172.151.0.0/24"
+  default = "172.51.0.0/24"
 }
 
 variable "er_contract_cloud_to_onprem" {
