@@ -34,7 +34,7 @@ variable "vnet1_epg_selector" {
 }
 
 variable "vnet1_epg_ip_based" {
-  default = "IP=='20.100.0.0/21'"
+  default = "IP in('20.100.0.0/21')"
 }
 
 # Internet External EPG + Contract
@@ -80,7 +80,7 @@ variable "vnet2_epg_selector" {
 }
 
 variable "vnet2_epg_ip_based" {
-  default = "IP=='30.100.0.0/21'"
+  default = "IP in('30.100.0.0/21')"
 }
 
 # Internet External EPG + Contract
