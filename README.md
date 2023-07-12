@@ -3,8 +3,8 @@
 
 This is a sample terraform code to build networking and policies on Azure through Cloud Network Controller. Some of the initial config and services are configured via GUI. 
 
-
 #### **<font color="lightblue">High Level Steps</font>**
+
 
 **Part 1 - Initial Config**
 1. Configure First Time Setup on CNC
@@ -12,7 +12,7 @@ This is a sample terraform code to build networking and policies on Azure throug
 3. Disable VNet peering of Hub VNet on CNC
 
 **Part 2 - Deploy Hub VNet networking**
-1. Deploy secondary VRF and add secondary CIDRs for L4-L7 services in the Hub VNet <font color="lightblue">(1 - hub-vnet-networking)</font>
+1. Deploy secondary VRF and CIDR for L4-L7 services in the Hub VNet <font color="lightblue">(1 - hub-vnet-networking)</font>
 2. Enable VNet peering of Hub VNet on CNC
 
 **Part 3 - Deploy L4-L7 Services on Hub VNet**
