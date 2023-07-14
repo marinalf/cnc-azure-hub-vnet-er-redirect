@@ -1,7 +1,7 @@
 
 #### **<font color="lightblue">Description</font>**
 
-This is a sample terraform code to build networking and policies on Azure through [Cloud Network Controller](https://www.cisco.com/c/en/us/solutions/data-center-virtualization/application-centric-infrastructure/cloud-network-controller.html). Some of the initial config and services are configured via GUI. 
+This is a sample terraform code to build networking and policies on Azure through [Cloud Network Controller](https://www.cisco.com/c/en/us/solutions/data-center-virtualization/application-centric-infrastructure/cloud-network-controller.html) policy model. Some of the initial config and services are configured via GUI. 
 
 #### **<font color="lightblue">High Level Steps</font>**
 

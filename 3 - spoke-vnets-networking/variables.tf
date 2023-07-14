@@ -42,11 +42,11 @@ variable "vnet1_subnets" {
   default = {
     subnet1 = {
       name = "subnet1"
-      ip   = "20.100.0.0/24"
+      ip   = "20.100.1.0/24"
     },
     subnet2 = {
       name = "subnet2"
-      ip   = "20.100.1.0/24"
+      ip   = "20.100.2.0/24"
     }
   }
 }
@@ -77,7 +77,7 @@ variable "vnet2_subnets" {
   default = {
     subnet3 = {
       name = "subnet3"
-      ip   = "30.100.0.0/24"
+      ip   = "30.100.3.0/24"
     }
   }
 }
