@@ -52,7 +52,7 @@ variable "vnet1_selector_subnet" {
 }
 
 variable "internet_contract" {
-  default = "internet-access" # Used by both VNets
+  default = "internet-access" 
 }
 
 # ER contract to allow on-prem/cloud and cloud/on-prem connectivity
@@ -83,19 +83,7 @@ variable "vnet2_epg_ip_based" {
   default = "IP=='30.100.0.0/21'"
 }
 
-# Internet External EPG + Contract
-
-variable "vnet2_internet" {
-  default = "vnet2-internet"
-}
-
-variable "vnet2_selector_name" {
-  default = "Internet"
-}
-
-variable "vnet2_selector_subnet" {
-  default = "0.0.0.0/0"
-}
+# Inter-VNet Contract
 
 variable "inter_vnet_contract" {
   default = "inter-vnet-contract"
