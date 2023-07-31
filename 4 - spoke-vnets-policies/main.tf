@@ -53,6 +53,7 @@ resource "aci_cloud_endpoint_selector" "vnet2_epg_selector" {
 resource "aci_contract" "onprem_to_cloud" {
   tenant_dn = data.aci_tenant.tenant1.id
   name      = var.er_contract_onprem_to_cloud
+  scope     = "global" # This contract will need to be imported and visible in the infra tenant
 }
 
 resource "aci_contract_subject" "onprem_to_cloud" {
