@@ -29,12 +29,21 @@ variable "vnet1_epg" {
   default = "vnet1-epg"
 }
 
-variable "vnet1_epg_selector" {
-  default = "vnet1-epg-selector"
-}
-
-variable "vnet1_epg_ip_based" {
-  default = "IP=='20.100.0.0/21'"
+variable "vnet1_subnets_selectors" {
+  type = map(object({
+    name = string
+    expression   = string
+  }))
+  default = {
+    selector_subnet1 = {
+      name = "selector_subnet1"
+      expression   = "IP=='20.100.1.0/24'"
+    },
+    selector_subnet2 = {
+      name = "selector_subnet2"
+      expression   = "IP=='20.100.2.0/24'"
+    }
+  }
 }
 
 # Internet External EPG + Contract
@@ -75,12 +84,17 @@ variable "vnet2_epg" {
   default = "vnet2-epg"
 }
 
-variable "vnet2_epg_selector" {
-  default = "vnet2-epg-selector"
-}
-
-variable "vnet2_epg_ip_based" {
-  default = "IP=='30.100.0.0/21'"
+variable "vnet2_subnets_selectors" {
+  type = map(object({
+    name = string
+    expression   = string
+  }))
+  default = {
+    selector_subnet3 = {
+      name = "selector_subnet3"
+      expression   = "IP=='30.100.3.0/24'"
+    }
+  }
 }
 
 # Inter-VNet Contract

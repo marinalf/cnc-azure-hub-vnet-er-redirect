@@ -28,9 +28,10 @@ resource "aci_cloud_epg" "vnet1_epg" {
 }
 
 resource "aci_cloud_endpoint_selector" "vnet1_epg_selector" {
+  for_each         = var.vnet1_subnets_selectors
   cloud_epg_dn     = aci_cloud_epg.vnet1_epg.id
-  name             = var.vnet1_epg_selector
-  match_expression = var.vnet1_epg_ip_based
+  name             = each.value.name
+  match_expression = each.value.expression
 }
 
 # VNet2 EPG (Single ASG, Network Centric)
@@ -43,9 +44,10 @@ resource "aci_cloud_epg" "vnet2_epg" {
 }
 
 resource "aci_cloud_endpoint_selector" "vnet2_epg_selector" {
+  for_each         = var.vnet2_subnets_selectors
   cloud_epg_dn     = aci_cloud_epg.vnet2_epg.id
-  name             = var.vnet2_epg_selector
-  match_expression = var.vnet2_epg_ip_based
+  name             = each.value.name
+  match_expression = each.value.expression
 }
 
 # ER Contract on Workload Tenant for On-prem to Cloud connectivity
